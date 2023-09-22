@@ -1,0 +1,11 @@
+channels:
+  - conda-forge
+  - bioconda
+  - defaults
+dependencies:
+  - diamond=2.1.8
+  - biopython=1.81
+  - r=3.6.0
+  - r-tidyverse=2.0.0
+  - bioconductor-biostrings=2.68.1
+  - r-mmgenome=0.7.1

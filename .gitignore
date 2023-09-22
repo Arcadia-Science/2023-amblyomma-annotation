@@ -1,0 +1,6 @@
+*.Rproj
+.Rhistory
+.RDataTmp
+*.fasta
+.DS_Store
+.Rproj.user/

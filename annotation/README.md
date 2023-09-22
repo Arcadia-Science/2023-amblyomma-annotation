@@ -6,7 +6,7 @@ Most annotation workflows will perform better if you have external evidence in t
 
 Proteins were predicted as part of a larger effort for processing Chelicerate proteomes, and selected from just tick species as documented [here](https://github.com/Arcadia-Science/2023-chelicerate-analysis).
 
-Transcripts were compiled and assembled from various _Amblyomma_ datasets including our own in-house Isoseq tick saliva dataset, which is documented [here](https://github.com/Arcadia-Science/2023-amblyomma-americanum-txome-assembly).
+Transcripts were compiled and assembled from various _Amblyomma americanum_ datasets including our own in-house Isoseq tick saliva dataset, which is documented [here](https://github.com/Arcadia-Science/2023-amblyomma-americanum-txome-assembly).
 
 ## Installation and Running the Workflow
 You can install Docker [according to your OS](https://docs.docker.com/engine/install/), and Nextflow and the dependencies by creating a conda environment:

@@ -20,7 +20,7 @@ git clone https://github.com/marchoeppner/genomeannotator.git
 git checkout dev
 ```
 
-Launch the workflow with specific parameters for annotating the tick genome with:
+This run of the workflow was run from commit a7726da. Launch the workflow with specific parameters for annotating the tick genome with:
 ```
 nextflow run main.nf \\
 -profile docker \\

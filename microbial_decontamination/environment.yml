@@ -9,3 +9,4 @@ dependencies:
   - r-tidyverse=2.0.0
   - bioconductor-biostrings=2.68.1
   - r-mmgenome=0.7.1
+  - r-rtsne=0.16

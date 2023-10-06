@@ -97,4 +97,4 @@ longest and shortest : 28230 and 49
 Total letters: 12510674
 Sequences have been sorted
 ```
-So according to this nothing shorter than 25 AAs?
+So according to this nothing shorter than 25 AAs? The set of proteins were run through Emily's [protein processing pipeline for chelicerates](https://github.com/Arcadia-Science/2023-chelicerate-analysis) to cluster at 90% identity to use with the other chelicerate data for NovelTree processing.

@@ -1,3 +1,9 @@
+*test/
+validation/results/
+validation/dbs/
+*null/
+*.nextflow*
+validation/work/
 microbial_decontamination/results/
 inputs/
 validation/seqs/

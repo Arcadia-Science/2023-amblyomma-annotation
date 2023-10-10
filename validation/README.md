@@ -1,6 +1,6 @@
 # Validation of Predicted Gene Models
 
-The two main validations of the predicted gene models/proteins will be through BUSCO lineage calculations and comparisons of protein content to other tick species.
+The two main validations of the predicted gene models/proteins will be through BUSCO lineage calculations and comparisons of protein content to other tick species. Below shows the BUSCO results from the resulting set of proteins and instructions for running the `DIAMOND blastp` workflow to determine alignment lengths of homologous proteins in other tick species.
 
 ## BUSCO validation for each proteome set
 `BUSCO` was ran against the set of proteins predicted from the output of Augustus and Evidence Modeler (which takes the set from Augustus and refines further), and the original set of proteins predicted from Augustus only using the Isoseq reads as hints, all with the command:
@@ -8,53 +8,7 @@ The two main validations of the predicted gene models/proteins will be through B
 ```
 busco --cpu 8 -i $file -o $file-arachnid-busco-checks -l arachnida_odb10 -m prot
 ```
-
-Augustus predictions:
-```
-	---------------------------------------------------
-	|Results from dataset arachnida_odb10              |
-	---------------------------------------------------
-	|C:89.8%[S:47.4%,D:42.4%],F:3.6%,M:6.6%,n:2934     |
-	|2637	Complete BUSCOs (C)                        |
-	|1392	Complete and single-copy BUSCOs (S)        |
-	|1245	Complete and duplicated BUSCOs (D)         |
-	|105	Fragmented BUSCOs (F)                      |
-	|192	Missing BUSCOs (M)                         |
-	|2934	Total BUSCO groups searched                |
-	---------------------------------------------------
-```
-
-Evidence modeler predictions:
-```
-	---------------------------------------------------
-	|Results from dataset arachnida_odb10              |
-	---------------------------------------------------
-	|C:89.2%[S:74.9%,D:14.3%],F:3.6%,M:7.2%,n:2934     |
-	|2617	Complete BUSCOs (C)                        |
-	|2198	Complete and single-copy BUSCOs (S)        |
-	|419	Complete and duplicated BUSCOs (D)         |
-	|107	Fragmented BUSCOs (F)                      |
-	|210	Missing BUSCOs (M)                         |
-	|2934	Total BUSCO groups searched                |
-	---------------------------------------------------
-```
-
-Original Augustus predictions:
-```
-	---------------------------------------------------
-	|Results from dataset arachnida_odb10              |
-	---------------------------------------------------
-	|C:82.4%[S:50.9%,D:31.5%],F:4.0%,M:13.6%,n:2934    |
-	|2415	Complete BUSCOs (C)                        |
-	|1492	Complete and single-copy BUSCOs (S)        |
-	|923	Complete and duplicated BUSCOs (D)         |
-	|116	Fragmented BUSCOs (F)                      |
-	|403	Missing BUSCOs (M)                         |
-	|2934	Total BUSCO groups searched                |
-	---------------------------------------------------
-```
-
-When rerunning the annotation job without giving it external proteins from other ticks, these were the BUSCO results
+When running the annotation job without giving it external proteins from other ticks, these were the BUSCO results
 `Amblyomma_americanum_filtered_assembly.evm.updated.proteins.fasta` with 34,557 proteins, which is closer to the expected amount:
 
 ```
@@ -86,15 +40,18 @@ The original Augustus proteins from this run were more duplicated with ~40,000 p
 	---------------------------------------------------
 ```
 
-## cd-hit Clustering
-I took the updated proteins from evidence modeler and clustered at 99% with cd-hit and got a final total of 31,905 proteins. Interestingly the output of cd-hit also gives protein stats:
+## DIAMOND blastp workflow
+The Nextflow workflow automates creating a DIAMOND database of a query species (in this case our Amblyomma proteins) and performing DIAMOND `blastp` jobs between the query database and other tick species proteins that were obtained and processed through the [2023-chelicerate-analysis pipeline](https://github.com/Arcadia-Science/2023-chelicerate-analysis).
+
+To use the workflow, you will need to have Docker and Nextflow installed:
+1. Install Docker [according to these instructions for your operating system](https://docs.docker.com/engine/install/).
+2. The easiest way to install Nextflow without worrying about dependency issues on your machine is through a conda environment, and can [install according to the instructions for your operation system](https://docs.conda.io/en/latest/miniconda.html). This is included in the `environment.yml` file. You can access the `environment.yml` file and all files neccessary for running the workflow with:
+
 ```
-================================================================
-                            Output
-----------------------------------------------------------------
-total seq: 34557
-longest and shortest : 28230 and 49
-Total letters: 12510674
-Sequences have been sorted
+nextflow run validation.nf \\
+	--query <AMBLYOMMA_PROTEINS> \\
+	--outgroup_species_proteins <DIRECTORY_OUTGROUP_TICK_SPECIES_PROTEINS> \\
+	--outdir blast_results
 ```
-So according to this nothing shorter than 25 AAs? The set of proteins were run through Emily's [protein processing pipeline for chelicerates](https://github.com/Arcadia-Science/2023-chelicerate-analysis) to cluster at 90% identity to use with the other chelicerate data for NovelTree processing.
+
+The results are then processed with `scripts/validate-plot-protein-lengths.R`

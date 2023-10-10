@@ -1,9 +1,9 @@
 # Validation of Predicted Gene Models
 
-The two main validations of the predicted gene models/proteins will be through BUSCO lineage calculations and comparisons of protein content to other tick species. Below shows the BUSCO results from the resulting set of proteins and instructions for running the `DIAMOND blastp` workflow to determine alignment lengths of homologous proteins in other tick species.
+The two main validations of the predicted gene models/proteins will be through BUSCO lineage completeness calculations and comparisons of protein content to other tick species. Below shows the BUSCO results from the resulting set of proteins and instructions for running the `DIAMOND blastp` workflow to determine alignment lengths of homologous proteins in other tick species.
 
 ## BUSCO validation for each proteome set
-`BUSCO` was ran against the set of proteins predicted from the output of Augustus and Evidence Modeler (which takes the set from Augustus and refines further), and the original set of proteins predicted from Augustus only using the Isoseq reads as hints, all with the command:
+`BUSCO` was ran against the set of proteins predicted from the output of Augustus and Evidence Modeler (which takes the set from Augustus and refines further):
 
 ```
 busco --cpu 8 -i $file -o $file-arachnid-busco-checks -l arachnida_odb10 -m prot
@@ -39,6 +39,8 @@ The original Augustus proteins from this run were more duplicated with ~40,000 p
 	|2934	Total BUSCO groups searched                |
 	---------------------------------------------------
 ```
+
+We are moving forward with the proteins from EvidenceModeler to do further validation and use for downstream functional annotation purposes.
 
 ## DIAMOND blastp workflow
 The Nextflow workflow automates creating a DIAMOND database of a query species (in this case our Amblyomma proteins) and performing DIAMOND `blastp` jobs between the query database and other tick species proteins that were obtained and processed through the [2023-chelicerate-analysis pipeline](https://github.com/Arcadia-Science/2023-chelicerate-analysis).

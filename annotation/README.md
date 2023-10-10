@@ -25,11 +25,9 @@ This run of the workflow was run from commit a7726da. Launch the workflow with s
 nextflow run main.nf \\
 -profile docker \\
 --assembly ../assembly/Amblyomma_americanum_filtered_assembly.fasta \\
- --proteins ../external_info/2023-08-25-all-tick-species-proteins.fasta \\
  --transcripts ../external_info/orthofuser_final_clean.fa \\
  --outdir ../tick_annotation_v1 \\
  --aug_species fly \\
- --spaln_taxon ixodscap \\
  --evm true \\
  --busco-lineage arthropoda_odb10
 ```

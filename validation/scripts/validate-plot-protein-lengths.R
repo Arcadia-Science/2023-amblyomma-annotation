@@ -24,7 +24,7 @@ diamond_tables_clean <- diamond_tables %>%
 diamond_proportion_plot <- diamond_tables_clean %>% 
   left_join(tick_species_metadata) %>% 
   mutate(proportion = slen / qlen) %>% 
-  filter(proportion <= 1) %>% 
+  filter(proportion <= 1) %>% # proportion of proteins that are equal to or less than the query length, not including proportions larger than the reference in this plot
   ggplot(aes(x=proportion, y=species_name)) +
   geom_density_ridges_gradient(aes(fill = ..x..), scale = 2, size = 0.3) +
   scale_fill_gradientn(
@@ -32,6 +32,13 @@ diamond_proportion_plot <- diamond_tables_clean %>%
   facet_wrap(~ source, scales = "free", ncol=1) +
   theme_minimal() +
   theme(legend.position = "top", axis.title.x = element_blank(), strip.text = element_blank()) # remove facet labels to align
+
+diamond_tables_clean %>% 
+  left_join(tick_species_metadata) %>% 
+  mutate(proportion = slen / qlen) %>% 
+  filter(proportion > 1) %>% 
+  ggplot(aes(x=proportion, y=species_name)) +
+  geom_density_ridges_gradient()
 
 # combine with tick metadata for total protein counts
 tick_species_protein_hit_counts <- diamond_tables_clean %>% 

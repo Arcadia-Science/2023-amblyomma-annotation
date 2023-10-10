@@ -1,0 +1,10 @@
+channels:
+  - conda-forge
+  - bioconda
+  - defaults
+dependencies:
+  - nextflow=22.10.6
+  - r-tidyverse=2.0.0
+  - r-ggpubr=0.6.0
+  - r-viridis=0.6.4
+  - r-ggridges=0.5.4

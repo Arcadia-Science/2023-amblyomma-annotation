@@ -25,11 +25,11 @@ This run of the workflow was run from commit a7726da. Launch the workflow with s
 nextflow run main.nf \\
 -profile docker \\
 --assembly ../assembly/Amblyomma_americanum_filtered_assembly.fasta \\
- --proteins ../external_info/2023-08-25-all-tick-species-proteins.fasta \\
  --transcripts ../external_info/orthofuser_final_clean.fa \\
  --outdir ../tick_annotation_v1 \\
- --aug_species human \\
- --spaln_taxon ixodscap
+ --aug_species fly \\
+ --evm true \\
+ --busco-lineage arthropoda_odb10
 ```
 
 Currently running this on Nextflow Tower fails because of how certain files are called from the `assets` folder, and running this from the command-line works best but takes some time with RepeatMasking/RepeatModeling.

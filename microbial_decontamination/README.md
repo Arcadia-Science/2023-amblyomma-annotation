@@ -15,7 +15,7 @@ diamond makedb --in nr_rep_seq.fasta.gz --db diamond_nr_rep_db --threads 5
 
 Then perform `blastx` with:
 ```
-diamond blastx -d databases/diamond_nr_rep_db.dmnd -q inputs/Ambylomma_americanum_asm001.fasta -o results/Amblyomma_americanum_ncbi_nr_results.tsv --long-reads
+diamond blastx -d databases/diamond_nr_rep_db.dmnd -q inputs/Arcadia_Amblyomma_americanum_asm001_purged_cleanedup1.fasta -o results/Amblyomma_americanum_ncbi_nr_results.tsv --long-reads
 ```
 
 Aggregate taxonomy results per contig with `MEGAN blastlca`. Run `blast2lca` with:

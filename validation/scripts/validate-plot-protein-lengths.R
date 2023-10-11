@@ -2,6 +2,7 @@ library(tidyverse)
 library(ggridges)
 library(viridis)
 library(ggpubr)
+library(plotly)
 
 # blast table results
 blast_results <- "validation/results/blast_results/diamond_blastp/"
@@ -61,15 +62,12 @@ protein_hit_labels = c("Total Protein Hits Relative to Amblyomma", "Total Protei
 
 tick_species_hits_boxplot <- tick_species_metadata_hits %>% 
   ggplot(aes(x=reference_or_query, y=proportion)) +
-  geom_boxplot(aes(fill=source)) +
-  geom_jitter() +
+  geom_boxplot(fill="#BAB0A8") +
+  geom_jitter(aes(color=source), size=4) +
   theme_minimal() +
   labs(x="\n Protein Hits in Amblyomma Genome or Outgroup References", y="Proportion of Protein Hits") +
   scale_x_discrete(labels = protein_hit_labels) +
-  scale_fill_manual(values=c("#F28360", "#5088C5"))
-
-tick_species_hits_boxplot
-
+  scale_color_manual(values=c("#F28360", "#5088C5"))
 
 # save plots for length density and tick species hits boxplots
 ggsave("validation/figs/tick_protein_validation_gradient.pdf", diamond_proportion_plot, width=9, height=8, units=c("in"))

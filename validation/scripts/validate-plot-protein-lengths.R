@@ -37,7 +37,7 @@ diamond_proportion_plot <- diamond_tables_clean %>%
 
 diamond_proportion_plot
 
-diamond_tables_clean %>% 
+diamond_tables_clean %>%
   left_join(tick_species_metadata) %>% 
   mutate(proportion = slen / qlen) %>% 
   filter(proportion > 1) %>% 
@@ -66,6 +66,8 @@ tick_species_hits_boxplot <- tick_species_metadata_hits %>%
   labs(x="\n Protein Hits in Amblyomma Genome or Outgroup References", y="Proportion of Protein Hits") +
   scale_x_discrete(labels = protein_hit_labels) +
   scale_fill_manual(values=c("#F28360", "#5088C5"))
+
+tick_species_hits_boxplot
 
 
 # save plots for length density and tick species hits boxplots

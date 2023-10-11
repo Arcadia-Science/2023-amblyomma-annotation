@@ -62,6 +62,7 @@ protein_hit_labels = c("Total Protein Hits Relative to Amblyomma", "Total Protei
 tick_species_hits_boxplot <- tick_species_metadata_hits %>% 
   ggplot(aes(x=reference_or_query, y=proportion)) +
   geom_boxplot(aes(fill=source)) +
+  geom_jitter() +
   theme_minimal() +
   labs(x="\n Protein Hits in Amblyomma Genome or Outgroup References", y="Proportion of Protein Hits") +
   scale_x_discrete(labels = protein_hit_labels) +

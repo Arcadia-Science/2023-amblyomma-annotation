@@ -58,11 +58,17 @@ contig_lengths <- read.table("microbial_decontamination/results/Amblyomma_americ
 
 bac_contig_info <- left_join(bac_tax_table, contig_lengths)
 
-bac_contig_info %>%
+# histogram of contigs by length filled with color of class for those with bacterial or unknown taxonomy
+contaminants_histogram_plot <- bac_contig_info %>%
   filter(phylum != '') %>%
   ggplot(aes(length)) +
-  geom_histogram(aes(fill=class)) +
-  theme_bw()
+  geom_histogram(aes(fill=class), bins=35) +
+  theme_bw() +
+  scale_fill_manual(values=c("#5088C5", "#F28360", "#3B9886", "#F7B846", "#7A77AB")) +
+  labs(x = "Length of Contig (bp)", y="Number of Contigs") +
+  scale_y_continuous(expand = c(0,0))
+
+ggsave("microbial_decontamination/figs/contaminants_histogram_plot.pdf", width=11, height=8, units=c("in"))
 
 bac_contig_info %>%
   filter(phylum != '') %>%

@@ -28,8 +28,7 @@ nextflow run main.nf \\
  --transcripts ../external_info/orthofuser_final_clean.fa \\
  --outdir ../tick_annotation_v1 \\
  --aug_species fly \\
- --evm true \\
- --busco-lineage arthropoda_odb10
+ --evm true
 ```
 
 Currently running this on Nextflow Tower fails because of how certain files are called from the `assets` folder, and running this from the command-line works best but takes some time with RepeatMasking/RepeatModeling.

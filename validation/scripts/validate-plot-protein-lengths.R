@@ -41,9 +41,22 @@ diamond_proportion_plot
 diamond_tables_clean %>%
   left_join(tick_species_metadata) %>% 
   mutate(proportion = slen / qlen) %>% 
-  filter(proportion > 1) %>% 
-  ggplot(aes(x=proportion, y=species_name)) +
-  geom_density_ridges_gradient()
+  filter(proportion >=0.9) %>% 
+  group_by(species_name) %>% 
+  count() %>% 
+  left_join(tick_species_metadata) %>% 
+  mutate(proportion = n / total_protein_count) %>% 
+  arrange(desc(proportion))
+
+diamond_tables_clean %>%
+  left_join(tick_species_metadata) %>% 
+  mutate(proportion = slen / qlen) %>% 
+  filter(proportion <0.9) %>% 
+  group_by(species_name) %>% 
+  count() %>% 
+  left_join(tick_species_metadata) %>% 
+  mutate(proportion = n / total_protein_count) %>% 
+  arrange(desc(proportion))
 
 # combine with tick metadata for total protein counts
 tick_species_protein_hit_counts <- diamond_tables_clean %>% 

@@ -2,7 +2,6 @@ library(tidyverse)
 library(ggridges)
 library(viridis)
 library(ggpubr)
-library(plotly)
 
 # blast table results
 blast_results <- "validation/results/blast_results/diamond_blastp/"
@@ -45,8 +44,8 @@ diamond_tables_clean %>%
   group_by(species_name) %>% 
   count() %>% 
   left_join(tick_species_metadata) %>% 
-  mutate(proportion = n / total_protein_count) %>% 
-  arrange(desc(proportion))
+  mutate(proportion_of_reference = n / total_protein_count) %>% 
+  arrange(desc(proportion_of_reference))
 
 diamond_tables_clean %>%
   left_join(tick_species_metadata) %>% 
@@ -55,8 +54,8 @@ diamond_tables_clean %>%
   group_by(species_name) %>% 
   count() %>% 
   left_join(tick_species_metadata) %>% 
-  mutate(proportion = n / total_protein_count) %>% 
-  arrange(desc(proportion))
+  mutate(proportion_of_reference = n / total_protein_count) %>% 
+  arrange(desc(proportion_of_reference))
 
 # combine with tick metadata for total protein counts
 tick_species_protein_hit_counts <- diamond_tables_clean %>% 

@@ -37,12 +37,25 @@ diamond_proportion_plot <- diamond_tables_clean %>%
 
 diamond_proportion_plot
 
-diamond_tables_clean %>% 
+diamond_tables_clean %>%
   left_join(tick_species_metadata) %>% 
   mutate(proportion = slen / qlen) %>% 
-  filter(proportion > 1) %>% 
-  ggplot(aes(x=proportion, y=species_name)) +
-  geom_density_ridges_gradient()
+  filter(proportion >=0.9) %>% 
+  group_by(species_name) %>% 
+  count() %>% 
+  left_join(tick_species_metadata) %>% 
+  mutate(proportion_of_reference = n / total_protein_count) %>% 
+  arrange(desc(proportion_of_reference))
+
+diamond_tables_clean %>%
+  left_join(tick_species_metadata) %>% 
+  mutate(proportion = slen / qlen) %>% 
+  filter(proportion <0.9) %>% 
+  group_by(species_name) %>% 
+  count() %>% 
+  left_join(tick_species_metadata) %>% 
+  mutate(proportion_of_reference = n / total_protein_count) %>% 
+  arrange(desc(proportion_of_reference))
 
 # combine with tick metadata for total protein counts
 tick_species_protein_hit_counts <- diamond_tables_clean %>% 
@@ -61,12 +74,12 @@ protein_hit_labels = c("Total Protein Hits Relative to Amblyomma", "Total Protei
 
 tick_species_hits_boxplot <- tick_species_metadata_hits %>% 
   ggplot(aes(x=reference_or_query, y=proportion)) +
-  geom_boxplot(aes(fill=source)) +
+  geom_boxplot(fill="#BAB0A8") +
+  geom_jitter(aes(color=source), size=4) +
   theme_minimal() +
   labs(x="\n Protein Hits in Amblyomma Genome or Outgroup References", y="Proportion of Protein Hits") +
   scale_x_discrete(labels = protein_hit_labels) +
-  scale_fill_manual(values=c("#F28360", "#5088C5"))
-
+  scale_color_manual(values=c("#F28360", "#5088C5"))
 
 # save plots for length density and tick species hits boxplots
 ggsave("validation/figs/tick_protein_validation_gradient.pdf", diamond_proportion_plot, width=9, height=8, units=c("in"))

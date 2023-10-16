@@ -4,7 +4,7 @@ library(viridis)
 library(ggpubr)
 
 # blast table results
-blast_results <- "validation/results/blast_results/diamond_blastp/"
+blast_results <- "validation/full_tick_results/diamond_blastp/"
 files <- dir(blast_results, pattern="*.tsv")
 diamond_tables <- data_frame(filename = files) %>% 
   mutate(file_contents = map(filename, ~ read.table(file.path(blast_results, .)))

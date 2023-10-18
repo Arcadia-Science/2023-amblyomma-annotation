@@ -1,4 +1,4 @@
-# Annotation of the _Ambylomma americanum_ genome
+# Annotation of the _Amblyomma americanum_ genome
 
 This repository contains documentation and analysis scripts for annotating the _Amblyomma americanum_ tick genome (available in Genbank at [accession GCA_030143305.1](https://www.ncbi.nlm.nih.gov/datasets/genome/GCA_030143305.1/)) at Arcadia Science.
 

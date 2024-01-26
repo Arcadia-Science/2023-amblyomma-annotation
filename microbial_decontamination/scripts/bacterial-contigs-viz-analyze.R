@@ -70,6 +70,9 @@ contaminants_histogram_plot <- bac_contig_info %>%
 
 ggsave("microbial_decontamination/figs/contaminants_histogram_plot.pdf", width=11, height=8, units=c("in"))
 
+write_tsv(bac_contig_info, "microbial_decontamination/results/bacterial-contigs-info.tsv")
+       
+
 bac_contig_info %>%
   filter(phylum != '') %>%
   ggplot(aes(length)) +

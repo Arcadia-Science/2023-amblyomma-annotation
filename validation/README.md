@@ -43,7 +43,7 @@ The original Augustus proteins from this run were more duplicated with ~40,000 p
 We are moving forward with the proteins from EvidenceModeler to do further validation and use for downstream functional annotation purposes.
 
 ## DIAMOND blastp workflow
-The Nextflow workflow automates creating a DIAMOND database of a query species (in this case our Amblyomma proteins) and performing DIAMOND `blastp` jobs between the query database and other tick species proteins that were obtained and processed through the [2023-chelicerate-analysis pipeline](https://github.com/Arcadia-Science/2023-chelicerate-analysis).
+The Nextflow workflow automates creating a DIAMOND database of a query species (in this case our Amblyomma proteins) and performing DIAMOND `blastp` jobs between the query database and other tick species proteins.
 
 To use the workflow, you will need to have Docker and Nextflow installed:
 1. Install Docker [according to these instructions for your operating system](https://docs.docker.com/engine/install/).

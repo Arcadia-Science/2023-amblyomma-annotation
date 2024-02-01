@@ -21,19 +21,28 @@ diamond_tables_clean <- diamond_tables %>%
   mutate(species_name = gsub(".blast.tsv", "", species)) %>% 
   select(-species)
 
+test <- diamond_tables_clean %>% 
+  left_join(tick_species_metadata) %>% 
+  mutate(proportion = (slen / qlen) * 100) %>%
+  mutate(species_name_clean = gsub("_", " ", species_name)) %>% 
+  filter(proportion <= 100)
+
 diamond_proportion_plot <- diamond_tables_clean %>% 
   left_join(tick_species_metadata) %>% 
-  mutate(proportion = slen / qlen) %>%
+  mutate(proportion = (slen / qlen * 100 )) %>%
   mutate(species_name_clean = gsub("_", " ", species_name)) %>% 
-  filter(proportion <= 1) %>% # proportion of proteins that are equal to or less than the query length, not including proportions larger than the reference in this plot
-  ggplot(aes(x=proportion, y=species_name_clean)) +
-  geom_density_ridges_gradient(aes(fill = ..x..), scale = 2, size = 0.3) +
+  filter(proportion <= 100) %>% # proportion of proteins that are equal to or less than the query length, not including proportions larger than the reference in this plot
+  ggplot(aes(x=proportion, y=species_name_clean, height= ..density..)) +
+  geom_density_ridges_gradient(aes(fill = ..density..), stat="density", trim=TRUE) +
+  scale_y_discrete(expand=c(0,0)) +
+  scale_x_continuous(expand=c(0,0), limits=c(0, NA)) +
   scale_fill_gradientn(
-    colours = c("#0D0887FF", "#CC4678FF", "#F0F921FF")) +
+    colours = c("#0D0887FF", "#CC4678FF", "#F0F921FF"),
+    labels = function(x) { paste0(round(x * 100), "%")} ) +
   facet_wrap(~ source, scales = "free", ncol=1) +
   theme_bw() +
   theme(legend.position = "bottom", axis.title.y=element_blank()) +
-  labs(x="Proportion of Length of Amblyomma Protein : Length of Reference Hit")
+  labs(x="Proportion of Length of Amblyomma Protein / Length of Reference Hit (%)")
 
 diamond_proportion_plot
 

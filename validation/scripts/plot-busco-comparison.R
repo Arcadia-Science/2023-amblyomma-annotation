@@ -12,12 +12,20 @@ tick_species_metadata <- read.table("validation/metadata/all_tick_species_counts
 tick_busco_metadata <- left_join(busco_results, tick_species_metadata) %>% 
   select(-total_protein_count)
 
+species_order <- tick_busco_metadata %>% 
+  group_by(species_name, source) %>% 
+  arrange(source, desc(Complete))
+
+tick_busco_metadat <- tick_busco_metadata %>% 
+  left_join(species_order, by=c("species_name", "source"))
+
 # plot 
 my_colors <- c("#C6E7F4", "#5088C5", "#F7B846", "#F28360")
 
 busco_comps_plot <- tick_busco_metadata %>% 
-  select(-complete) %>% 
+  select(-complete) %>% # remove total completeness so shows complete vs complete (redundant)
   mutate(species_clean = gsub("_", " ", species_name)) %>% 
+  mutate(species_clean = fct_reorder(species_clean, Complete)) %>% 
   select(-species_name) %>% 
   pivot_longer(!c(species_clean, source), values_to = "percent") %>% 
   mutate(name = fct_rev(factor(name))) %>%

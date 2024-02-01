@@ -33,15 +33,16 @@ diamond_proportion_plot <- diamond_tables_clean %>%
   mutate(species_name_clean = gsub("_", " ", species_name)) %>% 
   filter(proportion <= 100) %>% # proportion of proteins that are equal to or less than the query length, not including proportions larger than the reference in this plot
   ggplot(aes(x=proportion, y=species_name_clean, height= ..density..)) +
-  geom_density_ridges_gradient(aes(fill = ..density..), stat="density", height=1, scale = 3, size = 0.5, trim=TRUE) +
+  geom_density_ridges_gradient(aes(fill = ..density..), stat="density", trim=TRUE) +
   scale_y_discrete(expand=c(0,0)) +
   scale_x_continuous(expand=c(0,0), limits=c(0, NA)) +
   scale_fill_gradientn(
-    colours = c("#0D0887FF", "#CC4678FF", "#F0F921FF")) +
+    colours = c("#0D0887FF", "#CC4678FF", "#F0F921FF"),
+    labels = function(x) { paste0(round(x * 100), "%")} ) +
   facet_wrap(~ source, scales = "free", ncol=1) +
   theme_bw() +
   theme(legend.position = "bottom", axis.title.y=element_blank()) +
-  labs(x="Proportion of Length of Amblyomma Protein : Length of Reference Hit")
+  labs(x="Proportion of Length of Amblyomma Protein / Length of Reference Hit (%)")
 
 diamond_proportion_plot
 

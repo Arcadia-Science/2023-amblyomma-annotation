@@ -21,15 +21,9 @@ diamond_tables_clean <- diamond_tables %>%
   mutate(species_name = gsub(".blast.tsv", "", species)) %>% 
   select(-species)
 
-test <- diamond_tables_clean %>% 
-  left_join(tick_species_metadata) %>% 
-  mutate(proportion = (slen / qlen) * 100) %>%
-  mutate(species_name_clean = gsub("_", " ", species_name)) %>% 
-  filter(proportion <= 100)
-
 diamond_proportion_plot <- diamond_tables_clean %>% 
   left_join(tick_species_metadata) %>% 
-  mutate(proportion = (slen / qlen * 100 )) %>%
+  mutate(proportion = (slen / qlen) * 100) %>%
   mutate(species_name_clean = gsub("_", " ", species_name)) %>% 
   filter(proportion <= 100) %>% # proportion of proteins that are equal to or less than the query length, not including proportions larger than the reference in this plot
   ggplot(aes(x=proportion, y=species_name_clean, height= ..density..)) +
@@ -46,40 +40,34 @@ diamond_proportion_plot <- diamond_tables_clean %>%
 
 diamond_proportion_plot
 
+# number of proteins with greater than 90% length proportion of reference hit
 diamond_tables_clean %>%
   left_join(tick_species_metadata) %>% 
   mutate(proportion = slen / qlen) %>% 
-  filter(proportion >=0.9) %>% 
+  filter(proportion > 0.9) %>% 
   group_by(species_name) %>% 
   count() %>% 
   left_join(tick_species_metadata) %>% 
   mutate(proportion_of_reference = n / total_protein_count) %>% 
   arrange(desc(proportion_of_reference))
 
-diamond_tables_clean %>%
-  left_join(tick_species_metadata) %>% 
-  mutate(proportion = slen / qlen) %>% 
-  filter(proportion <0.9) %>% 
+# amblyomma proteins with more than 2 hits
+diamond_tables_clean %>% 
+  group_by(species_name, sseqid) %>%
+  count() %>% 
+  filter(n > 2) %>% 
   group_by(species_name) %>% 
   count() %>% 
-  left_join(tick_species_metadata) %>% 
-  mutate(proportion_of_reference = n / total_protein_count) %>% 
-  arrange(desc(proportion_of_reference))
+  mutate(proportion_of_amblyomma = (n / 28319) * 100) # divided by total proteins in A. americanum for more than 2 hits
 
-# combine with tick metadata for total protein counts
-tick_species_protein_hit_counts <- diamond_tables_clean %>% 
-  group_by(species_name) %>% 
-  count() %>% 
-  mutate(protein_hits = n) %>% 
-  select(-n)
 
 tick_species_metadata_hits <- left_join(tick_species_protein_hit_counts, tick_species_metadata) %>% 
   mutate(proportion_of_reference = protein_hits / total_protein_count) %>% 
-  mutate(proportion_of_amblyomma_query = protein_hits / 34557) %>% 
+  mutate(proportion_of_amblyomma_query = protein_hits / 28319) %>% 
   select(species_name, source, proportion_of_reference, proportion_of_amblyomma_query) %>% 
   pivot_longer(!c(species_name, source), names_to="reference_or_query", values_to="proportion")
 
-protein_hit_labels = c("Total Protein Hits Relative to Amblyomma", "Total Protein Hits Relative to Reference")
+protein_hit_labels = c("Relative to Amblyomma genome", "Relative to outgroup reference")
 
 tick_species_hits_boxplot <- tick_species_metadata_hits %>% 
   ggplot(aes(x=reference_or_query, y=proportion)) +
@@ -89,6 +77,8 @@ tick_species_hits_boxplot <- tick_species_metadata_hits %>%
   labs(x="\n Protein Hits in Amblyomma Genome or Outgroup References", y="Proportion of Protein Hits") +
   scale_x_discrete(labels = protein_hit_labels) +
   scale_color_manual(values=c("#F28360", "#5088C5"))
+
+tick_species_hits_boxplot
 
 # save plots for length density and tick species hits boxplots
 ggsave("validation/figs/tick_protein_validation_gradient.pdf", diamond_proportion_plot, width=9, height=8, units=c("in"))
